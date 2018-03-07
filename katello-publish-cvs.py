@@ -102,6 +102,7 @@ def main():
                         help="name of the content view containing the repository that has been updated. Specify ALL if you want to update all the CVs", 
                         required=True)
     parser.add_argument("-v", help="Debug logging", action='store_true')
+    parser.add_argument("--target-env", help="Target Environment name for CCVs", default="Development")
     parser.add_argument("-c", "--config", help="Config File with katello addr and credentials", default="~/.config/katello-publish-cvs.ini")
     args = parser.parse_args()
     cv_name = args.cv_name
@@ -215,9 +216,9 @@ def main():
 
     wait_for_publish(10)
     
-    print "Promote all effected CCVs to Sviluppo environment"
+    print "Promote all effected CCVs to given environment"
     for ccv_id in ccv_ids_to_promote:
-        post_json(KATELLO_API + "content_view_versions/" + str(ccv_id) + "/promote", json.dumps({"environment_id": ENVIRONMENTS["Sviluppo"]}))
+        post_json(KATELLO_API + "content_view_versions/" + str(ccv_id) + "/promote", json.dumps({"environment_id": ENVIRONMENTS[args.target_env]}))
 
 
 if __name__ == "__main__":
