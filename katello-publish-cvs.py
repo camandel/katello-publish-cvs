@@ -98,7 +98,9 @@ def wait_for_publish(seconds):
 def main():
 
     parser = argparse.ArgumentParser(description="Push new repositories to clients for given product")
-    parser.add_argument("--cv-name", help="name of the content view containing the updated repository", required=True)
+    parser.add_argument("--cv-name", 
+                        help="name of the content view containing the repository that has been updated. Specify ALL if you want to update all the CVs", 
+                        required=True)
     parser.add_argument("-v", help="Debug logging", action='store_true')
     parser.add_argument("-c", "--config", help="Config File with katello addr and credentials", default="~/.config/katello-publish-cvs.ini")
     args = parser.parse_args()
@@ -147,7 +149,10 @@ def main():
     log.debug("Lifecycle environments: {}".format(ENVIRONMENTS))
     
     # Get all non-composite CVs from the API
-    cvs_json = get_json("{}organizations/{}/content_views?noncomposite=true&nondefault=true&name={}".format(SAT_API, org_id, cv_name))
+    if cv_name == 'ALL':
+        cvs_json = get_json("{}organizations/{}/content_views?noncomposite=true&nondefault=true&name={}".format(SAT_API, org_id, cv_name))
+    else:
+        cvs_json = get_json("{}organizations/{}/content_views?noncomposite=true&nondefault=true".format(SAT_API, org_id))
    
     # Get all sync tasks
     sync_tasks_json = get_json(URL + sync_tasks)
