@@ -151,9 +151,10 @@ def main():
     
     # Get all non-composite CVs from the API
     if cv_name == 'ALL':
-        cvs_json = get_json("{}organizations/{}/content_views?noncomposite=true&nondefault=true&name={}".format(SAT_API, org_id, cv_name))
-    else:
         cvs_json = get_json("{}organizations/{}/content_views?noncomposite=true&nondefault=true".format(SAT_API, org_id))
+    else:
+        cvs_json = get_json("{}organizations/{}/content_views?noncomposite=true&nondefault=true&name={}".format(SAT_API, org_id, cv_name))
+
    
     # Get all sync tasks
     sync_tasks_json = get_json(URL + sync_tasks)
